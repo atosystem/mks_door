@@ -23,6 +23,8 @@ from PIL import ImageDraw
 from PIL import ImageFont
 
 FONT_SIZE = 14
+TIME_FONT_SIZE = 24
+DATE_FONT_SIZE = 15
 
 disp = Adafruit_SSD1306.SSD1306_128_64(rst=0)
 
@@ -33,7 +35,9 @@ disp.display()
 width = disp.width
 height = disp.height
 
-font=ImageFont.truetype("./ARIALUNI.TTF", FONT_SIZE)
+font=ImageFont.truetype("./fonts/ARIALUNI.TTF", FONT_SIZE)
+lcd_font = ImageFont.truetype('./fonts/LCD-BOLD.TTF', size=TIME_FONT_SIZE)
+lcd_font2 = ImageFont.truetype('./fonts/LCD-BOLD.TTF', size=DATE_FONT_SIZE)
 
 startup_image = Image.new('1', (width, height))
 idle_image = Image.new('1', (width, height))
@@ -130,11 +134,24 @@ disp.display()
 
 
 while (1):
+    # get time
+    t = time.localtime()
+    current_date = time.strftime("%Y/%m/%d", t)
+    current_time = time.strftime("%H : %M : %S", t)
+    time_img = Image.new('1', (width, height))
+    time_draw = ImageDraw.Draw(time_img)
+    time_draw.text((5, 30), current_time, font=lcd_font, fill=255)
+    time_draw.text((25, 5), current_date, font=lcd_font2, fill=255)
+    
     disp.clear()
     disp.display()
-    disp.image(idle_image)
+
+    # disp.image(idle_image)
+    disp.image(time_img)
     disp.display()
+
     correct = False
+
     print("----------------")
     if finger.read_templates() != adafruit_fingerprint.OK:
         raise RuntimeError("Failed to read templates")
@@ -225,7 +242,3 @@ while (1):
         time.sleep(0.2)
 
     time.sleep(1)
-
-
-
-
