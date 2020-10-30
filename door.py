@@ -9,12 +9,6 @@ import json
 
 import requests
 
-# print("Loading members data")
-
-# with open('member.json' , 'r') as reader:
-#     members_data = json.loads(reader.read())
-
-
 # for oled display
 import Adafruit_SSD1306
 
@@ -47,16 +41,13 @@ startup_image = Image.new('1', (width, height))
 #idle_image = Image.open('logo_samd_c1.png')
 
 idle_image = Image.open('new_img.png').convert('1')
+print("new_img.png loaded")
 #idle_image.save('asdasd.png','PNG')
 
 auth_image = Image.new('1', (width, height))
 fail_auth_image = Image.new('1', (width, height))
 
-#Birthday Special
 
-hbd_image = Image.open("g_hbd_cake.png").convert('1')
-#i = hbd.convert('1')
-print("Hbd image loaded")
 
 draw = ImageDraw.Draw(startup_image)
 
@@ -264,14 +255,6 @@ try:
 
                         disp.image(disp_id_image)
                         disp.display()
-
-                        time.sleep(0.2)
-
-                        if finger.finger_id == 4:
-
-                            disp.image(hbd_image)
-                            disp.display()
-                            time.sleep(5)
 
 
                         GPIO.output(door_lock_pin, GPIO.HIGH)

@@ -1,1 +1,1 @@
-sudo python3 door_test.py
+sudo python3 door.py
