@@ -19,7 +19,7 @@ disp.display()
 width = disp.width
 height = disp.height
 
-font=ImageFont.truetype("./ARIALUNI.TTF", FONT_SIZE)
+font=ImageFont.truetype("./fonts/ARIALUNI.TTF", FONT_SIZE)
 succeed_image = Image.new('1', (width, height))
 place_finger_image = Image.new('1', (width, height))
 place_finger_again_image = Image.new('1', (width, height))

@@ -35,14 +35,28 @@ disp.display()
 width = disp.width
 height = disp.height
 
+print("Display width*height = {}*{}".format(width,height))
+
 font=ImageFont.truetype("./fonts/ARIALUNI.TTF", FONT_SIZE)
 lcd_font = ImageFont.truetype('./fonts/LCD-BOLD.TTF', size=TIME_FONT_SIZE)
 lcd_font2 = ImageFont.truetype('./fonts/LCD-BOLD.TTF', size=DATE_FONT_SIZE)
 
 startup_image = Image.new('1', (width, height))
-idle_image = Image.new('1', (width, height))
+
+#idle_image = Image.new('1', (width, height))
+#idle_image = Image.open('logo_samd_c1.png')
+
+idle_image = Image.open('new_img.png').convert('1')
+#idle_image.save('asdasd.png','PNG')
+
 auth_image = Image.new('1', (width, height))
 fail_auth_image = Image.new('1', (width, height))
+
+#Birthday Special
+
+hbd_image = Image.open("g_hbd_cake.png").convert('1')
+#i = hbd.convert('1')
+print("Hbd image loaded")
 
 draw = ImageDraw.Draw(startup_image)
 
@@ -50,9 +64,9 @@ draw.text((25, 1*FONT_SIZE -1), 'Makerspace',  font=font, fill=255)
 draw.text((20, 2*FONT_SIZE -1), '門禁系統 v1.0',  font=font, fill=255)
 
 
-draw = ImageDraw.Draw(idle_image)
+#draw = ImageDraw.Draw(idle_image)
 
-draw.text((10, 1*FONT_SIZE -1), '請將接近掃描指紋',  font=font, fill=255)
+#draw.text((10, 1*FONT_SIZE -1), '請將接近掃描指紋',  font=font, fill=255)
 
 
 draw = ImageDraw.Draw(fail_auth_image)
@@ -125,6 +139,7 @@ def draw_message(line_no,msg):
     
 
 disp.image(startup_image)
+#disp.image(hbd_image)
 disp.display()
 
 time.sleep(2)
@@ -146,8 +161,8 @@ while (1):
     disp.clear()
     disp.display()
 
-    # disp.image(idle_image)
-    disp.image(time_img)
+    disp.image(idle_image)
+    #disp.image(time_img)
     disp.display()
 
     correct = False
@@ -185,7 +200,14 @@ while (1):
         _data = {'finger_id' : finger.finger_id}
 
         req = session.post(BASE_URL+API_AUTH,data=_data,allow_redirects = True)
-        
+       
+
+        t = time.localtime()
+        current_date = time.strftime("%Y/%m/%d", t)
+        current_time = time.strftime("%H : %M : %S", t)
+        print(current_date,current_time)
+
+
         req = json.loads(req.text)
         disp.clear()
         disp.display()
@@ -204,6 +226,14 @@ while (1):
 
                     disp.image(disp_id_image)
                     disp.display()
+
+                    time.sleep(0.2)
+
+                    if finger.finger_id == 4:
+
+                        disp.image(hbd_image)
+                        disp.display()
+                        time.sleep(5)
 
 
                     GPIO.output(door_lock_pin, GPIO.HIGH)
